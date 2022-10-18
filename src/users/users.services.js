@@ -130,5 +130,6 @@ module.exports = {
     patchUser,
     deleteUser,
     getMyUser,
-    deleteMyUser
+    deleteMyUser,
+    patchMyUser
 }
