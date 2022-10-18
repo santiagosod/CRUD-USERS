@@ -13,7 +13,8 @@ router.route("/me")
         userServices.getMyUser
     )
     .patch(
-        passport.authenticate("jwt", { session: false })
+        passport.authenticate("jwt", { session: false }),
+        userServices.patchMyUser
     )
     .delete(
         passport.authenticate("jwt", {session: false}),
