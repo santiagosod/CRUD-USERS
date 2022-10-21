@@ -100,26 +100,52 @@ const getMyUser = (req, res) => {
 const deleteMyUser = (req, res) => {
     const id = req.user.id
 
-    usersControllers.deleteUser(id)
-        .then(response => {
-            res.status(204).json(response)
+    usersControllers.updateUser(id, {status: "inactive"})
+    .then(() => {
+        res.status(200).json({ message: "Your user was deleted succesfully!" })
+    })
+    .catch(err => {
+        res.status(400).json({ message: err.message })
+    })
+}
+
+const patchMyUser = (req, res) => {
+    const id = req.user.id
+    const { firstName, lastName, phone, gender, country, birthday } = req.body
+
+    usersControllers.updateUser(id, { firstName, lastName, phone, gender, country, birthday })
+        .then(() => {
+            res.status(200).json({ message: "Profile updated succesfully!" })
         })
         .catch(err => {
             res.status(400).json({ message: err.message })
         })
 }
 
-const patchMyUser = (req, res) => {
+const putMyUser = (req, res) => {
     const id = req.user.id
-    const { firstName, lastName, phone, gender, country } = req.body
+    const { firstName, lastName, phone, gender, country, birthday } = req.body
 
-    usersControllers.updateUser(id, { firstName, lastName, phone, gender, country })
-        .then(response => {
-            res.status(200).json({message: "Profile updated succesfully"})
+    if (firstName && lastName && phone && gender && country && birthday) {
+        usersControllers.updateUser(id, { firstName, lastName, phone, gender, country, birthday })
+            .then(() => {
+                res.status(200).json({ message: "Profile updated succesfully" })
+            })
+            .catch(err => {
+                res.status(400).json({ message: err.message })
+            })
+    } else {
+        res.status(404).json({
+            message: "Mising data", fields: {
+                firstName: "string",
+                lastName: "string",
+                phone: "+322344357612",
+                gender: "string",
+                country: "string",
+                birthday: "YYYY/MM/DD"
+            }
         })
-        .catch(err => {
-            res.status(404).json({message: err.message})
-        })
+    }
 }
 
 //! Exports
@@ -131,5 +157,6 @@ module.exports = {
     deleteUser,
     getMyUser,
     deleteMyUser,
-    patchMyUser
+    patchMyUser,
+    putMyUser
 }

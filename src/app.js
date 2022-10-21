@@ -3,10 +3,11 @@ const express = require('express');
 const db = require("./tools/database")
 
 //? Files
-const {port} = require('./config')
+const { port } = require('./config')
 //* Routes
 const userRouter = require("./users/users.router")
 const authRouter = require("./auth/auth.router")
+const initModels = require("./models/initModels")
 
 //? Initial Configs
 const app = express()
@@ -28,6 +29,8 @@ db.sync()
     .catch(err => {
         console.log(err);
     })
+
+initModels()
 
 app.get('/', (req, res) => {
     res.status(200).json({
